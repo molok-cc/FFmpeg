@@ -1,0 +1,18 @@
+[submodule "vendor/aomedia.googlesource.com/aom"]
+	path = vendor/aomedia.googlesource.com/aom
+	url = https://aomedia.googlesource.com/aom
+[submodule "vendor/gitlab.com/AOMediaCodec/SVT-AV1"]
+	path = vendor/gitlab.com/AOMediaCodec/SVT-AV1
+	url = https://gitlab.com/AOMediaCodec/SVT-AV1.git
+[submodule "vendor/github.com/google/shaderc"]
+	path = vendor/github.com/google/shaderc
+	url = https://github.com/google/shaderc.git
+[submodule "vendor/github.com/Netflix/vmaf"]
+	path = vendor/github.com/Netflix/vmaf
+	url = https://github.com/Netflix/vmaf.git
+[submodule "vendor/github.com/sekrit-twc/zimg"]
+	path = vendor/github.com/sekrit-twc/zimg
+	url = https://github.com/sekrit-twc/zimg.git
+[submodule "vendor/git.videolan.org/git/ffmpeg/nv-codec-headers"]
+	path = vendor/git.videolan.org/git/ffmpeg/nv-codec-headers
+	url = https://git.videolan.org/git/ffmpeg/nv-codec-headers.git

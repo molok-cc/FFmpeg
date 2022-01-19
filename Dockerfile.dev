@@ -1,0 +1,12 @@
+FROM nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+  clang nasm pkg-config cmake ninja-build meson autoconf libtool git curl
+RUN apt-get install -y libass-dev libfdk-aac-dev libopus-dev \
+            librtmp-dev libsmbclient-dev libsoxr-dev libsrt-dev \
+            libssh-dev libvpx-dev libwebp-dev libx264-dev libx265-dev \
+            libxml2-dev
+WORKDIR /root
+COPY . .
+RUN ./build_vendor.sh
+LABEL org.opencontainers.image.source=https://github.com/molok-cc/FFmpeg

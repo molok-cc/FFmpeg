@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  ffmpeg-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: ghcr.io/molok-cc/ffmpeg:dev
+  ffmpeg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/molok-cc/ffmpeg
