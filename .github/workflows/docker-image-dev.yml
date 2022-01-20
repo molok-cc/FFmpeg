@@ -7,9 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+    - name: Build the Docker image
+      run: docker-compose build ffmpeg-dev
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Build the Docker image
-      run: docker-compose build ffmpeg
     - name: Push image
-      run: docker-compose push ffmpeg
+      run: docker-compose push ffmpeg-dev
