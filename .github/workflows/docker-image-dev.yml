@@ -1,6 +1,12 @@
 name: Dev Docker Image CI
 
-on: workflow_dispatch
+on:
+  push:
+    paths:
+    - build_vendor.sh
+    - Dockerfile.dev
+    - .github/workflows/docker-image-dev.yml
+  workflow_dispatch:
 
 jobs:
   build:
