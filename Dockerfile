@@ -12,11 +12,15 @@ RUN apt-get update && \
   libxml2 \
   && rm -rf /var/lib/apt/lists/*
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
-COPY --from=0 /usr/local/lib/x86_64-linux-gnu/libvmaf.so.1 /usr/local/lib
-COPY --from=0 /usr/local/lib/libzimg.so.2 /usr/local/lib
-COPY --from=0 /usr/local/lib/libtensorflow.so.2 /usr/local/lib
-COPY --from=0 /usr/local/lib/libtensorflow_framework.so.2 /usr/local/lib
-COPY --from=0 /usr/local/lib/libSvtAv1Enc.so.0 /usr/local/lib
-COPY --from=0 /root/ffmpeg/ffmpeg /usr/local/bin
-COPY --from=0 /root/ffmpeg/ffprobe /usr/local/bin
+COPY --from=0 \
+  /usr/local/lib/x86_64-linux-gnu/libvmaf.so.1 \
+  /usr/local/lib/libzimg.so.2 \
+  /usr/local/lib/libtensorflow.so.2 \
+  /usr/local/lib/libtensorflow_framework.so.2 \
+  /usr/local/lib/libSvtAv1Enc.so.0 \
+  /usr/local/lib/
+COPY --from=0 \
+  /root/ffmpeg/ffmpeg \
+  /root/ffmpeg/ffprobe \
+  /usr/local/bin/
 LABEL org.opencontainers.image.source=https://github.com/molok-cc/FFmpeg
