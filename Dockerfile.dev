@@ -9,6 +9,5 @@ RUN apt-get update \
     libssh-dev libvpx-dev libwebp-dev libx264-dev libx265-dev \
     libxml2-dev \
   && ./build_vendor.sh \
-  && rm -rf vendor \
-  && rm -rf /var/lib/apt/lists/*
+  && git submodule deinit --all -f
 LABEL org.opencontainers.image.source=https://github.com/molok-cc/FFmpeg
