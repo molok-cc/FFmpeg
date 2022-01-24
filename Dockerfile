@@ -1,6 +1,5 @@
 FROM ghcr.io/molok-cc/ffmpeg:dev
-WORKDIR /root
-COPY . .
+WORKDIR /root/ffmpeg
 RUN ./build.sh
 
 FROM nvidia/cuda:11.5.1-cudnn8-runtime-ubuntu20.04
@@ -18,6 +17,6 @@ COPY --from=0 /usr/local/lib/libzimg.so.2 /usr/local/lib
 COPY --from=0 /usr/local/lib/libtensorflow.so.2 /usr/local/lib
 COPY --from=0 /usr/local/lib/libtensorflow_framework.so.2 /usr/local/lib
 COPY --from=0 /usr/local/lib/libSvtAv1Enc.so.0 /usr/local/lib
-COPY --from=0 /root/ffmpeg /usr/local/bin
-COPY --from=0 /root/ffprobe /usr/local/bin
+COPY --from=0 /root/ffmpeg/ffmpeg /usr/local/bin
+COPY --from=0 /root/ffmpeg/ffprobe /usr/local/bin
 LABEL org.opencontainers.image.source=https://github.com/molok-cc/FFmpeg
