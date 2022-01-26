@@ -116,7 +116,7 @@ static const AVOption options[] = {
 };
 
 static const AVClass mov_isobmff_muxer_class = {
-    .class_name = "mov/mp4/tgp/psp/tg2/ipod/ismv/f4v muxer",
+    .class_name = "mov/mp4/tgp/psp/tg2/ipod/ismv/f4v/avif muxer",
     .item_name  = av_default_item_name,
     .option     = options,
     .version    = LIBAVUTIL_VERSION_INT,
@@ -7388,11 +7388,6 @@ static int mov_write_trailer(AVFormatContext *s)
         }
     }
 
-    if (mov->mode == MODE_AVIF) {
-        if ((res = mov_write_avif_meta_tag(pb, mov, s)) < 0)
-            return res;
-    }
-
     if (!(mov->flags & FF_MOV_FLAG_FRAGMENT)) {
         moov_pos = avio_tell(pb);
 
@@ -7432,7 +7427,7 @@ static int mov_write_trailer(AVFormatContext *s)
             ffio_wfourcc(pb, "free");
             ffio_fill(pb, 0, size - 8);
             avio_seek(pb, moov_pos, SEEK_SET);
-        } else {
+        } else if (mov->mode != MODE_AVIF) {
             if ((res = mov_write_moov_tag(pb, mov, s)) < 0)
                 return res;
         }
@@ -7458,6 +7453,11 @@ static int mov_write_trailer(AVFormatContext *s)
             if (res < 0)
                 return res;
         }
+    }
+
+    if (mov->mode == MODE_AVIF) {
+        if ((res = mov_write_avif_meta_tag(pb, mov, s)) < 0)
+            return res;
     }
 
     return res;
