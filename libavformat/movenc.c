@@ -116,7 +116,7 @@ static const AVOption options[] = {
 };
 
 static const AVClass mov_isobmff_muxer_class = {
-    .class_name = "mov/mp4/tgp/psp/tg2/ipod/ismv/f4v muxer",
+    .class_name = "mov/mp4/tgp/psp/tg2/ipod/ismv/f4v/avif muxer",
     .item_name  = av_default_item_name,
     .option     = options,
     .version    = LIBAVUTIL_VERSION_INT,
@@ -3902,8 +3902,8 @@ static int mov_write_mdta_ilst_tag(AVIOContext *pb, MOVMuxContext *mov,
 }
 
 /* meta data tags */
-static int mov_write_meta_tag(AVIOContext *pb, MOVMuxContext *mov,
-                              AVFormatContext *s)
+static int mov_write_udta_meta_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
 {
     int size = 0;
     int64_t pos = avio_tell(pb);
@@ -4051,7 +4051,7 @@ static int mov_write_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
         mov_write_raw_metadata_tag(s, pb_buf, "XMP_", "xmp");
     } else {
         /* iTunes meta data */
-        mov_write_meta_tag(pb_buf, mov, s);
+        mov_write_udta_meta_tag(pb_buf, mov, s);
         mov_write_loci_tag(s, pb_buf);
     }
 
@@ -4186,6 +4186,178 @@ static int mov_setup_track_ids(MOVMuxContext *mov, AVFormatContext *s)
     mov->track_ids_ok = 1;
 
     return 0;
+}
+
+static int mov_write_avif_hdlr_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    avio_wb32(pb, 33);
+    ffio_wfourcc(pb, "hdlr");
+    avio_wl32(pb, 0);
+    avio_wb32(pb, 0);
+    ffio_wfourcc(pb, "pict");
+    avio_wb32(pb, 0);
+    avio_wb32(pb, 0);
+    avio_wb32(pb, 0);
+    avio_w8(pb, 0);
+    return 33;
+}
+
+static int mov_write_avif_ptim_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    avio_wb32(pb, 14);
+    ffio_wfourcc(pb, "pitm");
+    avio_wl32(pb, 0);
+    avio_wb16(pb, 1);
+    return 14;
+}
+
+static int mov_write_avif_infe_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "infe");
+    avio_wl32(pb, 2);
+    avio_wb16(pb, 1);
+    avio_wb16(pb, 0);
+    ffio_wfourcc(pb, "av01");
+    avio_w8(pb, 0);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_iinf_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "iinf");
+    avio_wl32(pb, 0);
+    avio_wb16(pb, 1);
+
+    mov_write_avif_infe_tag(pb, mov, s);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_iloc_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+    MOVTrack *trk = &mov->tracks[0];
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "iloc");
+    avio_wl32(pb, 0);
+    avio_w8(pb, 0x44);
+    avio_w8(pb, 0);
+    avio_wb16(pb, 1);
+
+    avio_wb16(pb, 1);
+    avio_wb16(pb, 0);
+    avio_wb16(pb, 1);
+
+    avio_wb32(pb, trk->cluster[0].pos);
+    avio_wb32(pb, trk->cluster[0].size);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_ispe_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    avio_wb32(pb, 20);
+    ffio_wfourcc(pb, "ispe");
+    avio_wl32(pb, 0);
+    avio_wb32(pb, s->streams[0]->codecpar->width);
+    avio_wb32(pb, s->streams[0]->codecpar->height);
+    return 20;
+}
+
+static int mov_write_avif_pixi_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(s->streams[0]->codecpar->format);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "pixi");
+    avio_wl32(pb, 0);
+    avio_w8(pb, desc->nb_components);
+    for (uint8_t chan = 0; chan < desc->nb_components; ++chan)
+        avio_w8(pb, desc->comp[chan].depth);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_ipco_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "ipco");
+
+    mov_write_avif_ispe_tag(pb, mov, s);
+    mov_write_avif_pixi_tag(pb, mov, s);
+    mov_write_av1c_tag(pb, mov->tracks);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_ipma_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "ipma");
+    avio_wl32(pb, 0);
+    avio_wb32(pb, 1);
+
+    avio_wb16(pb, 1);
+    avio_w8(pb, 3);
+
+    avio_w8(pb, 1);
+    avio_w8(pb, 2);
+    avio_w8(pb, 3 | 0x80);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_iprp_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+
+    avio_skip(pb, 4);
+    ffio_wfourcc(pb, "iprp");
+
+    mov_write_avif_ipco_tag(pb, mov, s);
+    mov_write_avif_ipma_tag(pb, mov, s);
+
+    return update_size(pb, pos);
+}
+
+static int mov_write_avif_meta_tag(AVIOContext *pb, MOVMuxContext *mov,
+                                   AVFormatContext *s)
+{
+    int64_t pos = avio_tell(pb);
+    avio_wb32(pb, 0); /* size placeholder*/
+    ffio_wfourcc(pb, "meta");
+    avio_wb32(pb, 0);
+
+    mov_write_avif_hdlr_tag(pb, mov, s);
+    mov_write_avif_ptim_tag(pb, mov, s);
+    mov_write_avif_iinf_tag(pb, mov, s);
+    mov_write_avif_iloc_tag(pb, mov, s);
+    mov_write_avif_iprp_tag(pb, mov, s);
+
+    return update_size(pb, pos);
 }
 
 static int mov_write_moov_tag(AVIOContext *pb, MOVMuxContext *mov,
@@ -5022,7 +5194,10 @@ static void mov_write_ftyp_tag_internal(AVIOContext *pb, AVFormatContext *s,
         ffio_wfourcc(pb, "isml");
     else if (mov->mode == MODE_F4V)
         ffio_wfourcc(pb, "f4v ");
-    else
+    else if (mov->mode == MODE_AVIF) {
+        ffio_wfourcc(pb, "avif");
+        minor =     0;
+    } else
         ffio_wfourcc(pb, "qt  ");
 
     if (write_minor)
@@ -5065,6 +5240,8 @@ static int mov_write_ftyp_tag(AVIOContext *pb, AVFormatContext *s)
     // compatible brand a second time.
     if (mov->mode == MODE_ISM) {
         ffio_wfourcc(pb, "piff");
+    } else if (mov->mode == MODE_AVIF) {
+        ffio_wfourcc(pb, "mif1");
     } else if (mov->mode != MODE_MOV) {
         // We add tfdt atoms when fragmenting, signal this with the iso6 compatible
         // brand, if not already the major brand. This is compatible with users that
@@ -6569,6 +6746,7 @@ static int mov_init(AVFormatContext *s)
     else if (IS_MODE(ipod, IPOD)) mov->mode = MODE_IPOD;
     else if (IS_MODE(ismv, ISMV)) mov->mode = MODE_ISM;
     else if (IS_MODE(f4v,   F4V)) mov->mode = MODE_F4V;
+    else if (IS_MODE(avif, AVIF)) mov->mode = MODE_AVIF;
 #undef IS_MODE
 
     if (mov->flags & FF_MOV_FLAG_DELAY_MOOV)
@@ -6797,10 +6975,14 @@ static int mov_init(AVFormatContext *s)
                         pix_fmt == AV_PIX_FMT_MONOWHITE ||
                         pix_fmt == AV_PIX_FMT_MONOBLACK;
             }
-            if (track->par->codec_id == AV_CODEC_ID_VP9 ||
-                track->par->codec_id == AV_CODEC_ID_AV1) {
+            if (track->par->codec_id == AV_CODEC_ID_VP9) {
                 if (track->mode != MODE_MP4) {
                     av_log(s, AV_LOG_ERROR, "%s only supported in MP4.\n", avcodec_get_name(track->par->codec_id));
+                    return AVERROR(EINVAL);
+                }
+            } else if (track->par->codec_id == AV_CODEC_ID_AV1) {
+                if (track->mode != MODE_MP4 && track->mode != MODE_AVIF) {
+                    av_log(s, AV_LOG_ERROR, "%s only supported in MP4 and AVIF.\n", avcodec_get_name(track->par->codec_id));
                     return AVERROR(EINVAL);
                 }
             } else if (track->par->codec_id == AV_CODEC_ID_VP8) {
@@ -7245,7 +7427,7 @@ static int mov_write_trailer(AVFormatContext *s)
             ffio_wfourcc(pb, "free");
             ffio_fill(pb, 0, size - 8);
             avio_seek(pb, moov_pos, SEEK_SET);
-        } else {
+        } else if (mov->mode != MODE_AVIF) {
             if ((res = mov_write_moov_tag(pb, mov, s)) < 0)
                 return res;
         }
@@ -7271,6 +7453,11 @@ static int mov_write_trailer(AVFormatContext *s)
             if (res < 0)
                 return res;
         }
+    }
+
+    if (mov->mode == MODE_AVIF) {
+        if ((res = mov_write_avif_meta_tag(pb, mov, s)) < 0)
+            return res;
     }
 
     return res;
@@ -7370,6 +7557,11 @@ static const AVCodecTag codec_f4v_tags[] = {
     { AV_CODEC_ID_H264,   MKTAG('a','v','c','1') },
     { AV_CODEC_ID_VP6A,   MKTAG('V','P','6','A') },
     { AV_CODEC_ID_VP6F,   MKTAG('V','P','6','F') },
+    { AV_CODEC_ID_NONE, 0 },
+};
+
+static const AVCodecTag codec_avif_tags[] = {
+    { AV_CODEC_ID_AV1,    MKTAG('a','v','0','1') },
     { AV_CODEC_ID_NONE, 0 },
 };
 
@@ -7531,6 +7723,25 @@ const AVOutputFormat ff_f4v_muxer = {
     .deinit            = mov_free,
     .flags             = AVFMT_GLOBALHEADER | AVFMT_ALLOW_FLUSH,
     .codec_tag         = (const AVCodecTag* const []){ codec_f4v_tags, 0 },
+    .check_bitstream   = mov_check_bitstream,
+    .priv_class        = &mov_isobmff_muxer_class,
+};
+#endif
+#if CONFIG_AVIF_MUXER
+const AVOutputFormat ff_avif_muxer = {
+    .name              = "avif",
+    .long_name         = NULL_IF_CONFIG_SMALL("AV1 Image File Format (AVIF)"),
+    .mime_type         = "image/avif",
+    .extensions        = "avif",
+    .priv_data_size    = sizeof(MOVMuxContext),
+    .video_codec       = AV_CODEC_ID_AV1,
+    .init              = mov_init,
+    .write_header      = mov_write_header,
+    .write_packet      = mov_write_packet,
+    .write_trailer     = mov_write_trailer,
+    .deinit            = mov_free,
+    .flags             = AVFMT_GLOBALHEADER | AVFMT_ALLOW_FLUSH,
+    .codec_tag         = (const AVCodecTag* const []){ codec_avif_tags, 0 },
     .check_bitstream   = mov_check_bitstream,
     .priv_class        = &mov_isobmff_muxer_class,
 };
