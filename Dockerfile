@@ -17,7 +17,7 @@ COPY --from=0 \
   /usr/local/lib/libzimg.so.2 \
   /usr/local/lib/libtensorflow.so.2 \
   /usr/local/lib/libtensorflow_framework.so.2 \
-  /usr/local/lib/libSvtAv1Enc.so.0 \
+  /usr/local/lib/libSvtAv1Enc.so.1 \
   /usr/local/lib/
 COPY --from=0 \
   /root/ffmpeg/ffmpeg \
