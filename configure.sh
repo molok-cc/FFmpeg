@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CUDA_INCLUDE=/usr/local/cuda-11.5/targets/x86_64-linux/include
+CUDA_INCLUDE=/usr/local/cuda/targets/x86_64-linux/include
 
 CFLAGS="$CFLAGS -I$CUDA_INCLUDE"
 CXXFLAGS="$CXXFLAGS -I$CUDA_INCLUDE"
@@ -10,6 +10,7 @@ CXXFLAGS="$CXXFLAGS -I$CUDA_INCLUDE"
   --disable-avdevice \
   --enable-libaom \
   --enable-libass \
+  --enable-libdav1d \
   --enable-libfdk-aac \
   --enable-libfontconfig \
   --enable-libfreetype \

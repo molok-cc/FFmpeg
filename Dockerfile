@@ -2,13 +2,13 @@ FROM ghcr.io/molok-cc/ffmpeg:dev
 WORKDIR /root/ffmpeg
 RUN ./build.sh
 
-FROM nvidia/cuda:11.5.1-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:11.7.0-runtime-ubuntu22.04
 ENV TZ=Etc/UTC
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  libass9 libfdk-aac1 libopus0 \
-  librtmp1 libsmbclient libsoxr0 libsrt1 \
-  libssh-4 libvpx6 libwebp6 libwebpmux3 libx264-155 libx265-179 \
+  libass9 libdav1d5 libfdk-aac2 libopus0 \
+  librtmp1 libsmbclient libsoxr0 libsrt1.4-openssl \
+  libvpx7 libwebp7 libwebpmux3 libx264-163 libx265-199 \
   libxml2 \
   && rm -rf /var/lib/apt/lists/*
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"

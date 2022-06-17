@@ -1,11 +1,11 @@
-FROM nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
 WORKDIR /root/ffmpeg
 COPY . .
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     clang nasm pkg-config cmake ninja-build meson autoconf libtool git curl \
-  && apt-get install -y libass-dev libfdk-aac-dev libopus-dev \
-    librtmp-dev libsmbclient-dev libsoxr-dev libsrt-dev \
+  && apt-get install -y libass-dev libfdk-aac-dev libdav1d-dev libopus-dev \
+    librtmp-dev libsmbclient-dev libsoxr-dev libsrt-openssl-dev \
     libssh-dev libvpx-dev libwebp-dev libx264-dev libx265-dev \
     libxml2-dev \
   && ./build_vendor.sh \
