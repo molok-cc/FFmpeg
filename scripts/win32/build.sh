@@ -23,6 +23,7 @@ cd $ROOT
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree \
+    --enable-libmfx \
     --toolchain=msvc \
     --cc=$CC \
     --enable-pic \

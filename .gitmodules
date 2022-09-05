@@ -19,3 +19,6 @@
 [submodule "vendor/github.com/GPUOpen-LibrariesAndSDKs/AMF"]
 	path = vendor/github.com/GPUOpen-LibrariesAndSDKs/AMF
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git
+[submodule "vendor/github.com/Intel-Media-SDK/MediaSDK"]
+	path = vendor/github.com/Intel-Media-SDK/MediaSDK
+	url = https://github.com/Intel-Media-SDK/MediaSDK.git
