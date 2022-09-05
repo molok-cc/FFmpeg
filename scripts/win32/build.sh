@@ -24,7 +24,6 @@ cd $ROOT
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree --disable-doc \
-    --enable-ffnvcodec \
     --arch=x86_64 \
     --target-os=win64 --toolchain=msvc \
     --cc=$CC \
