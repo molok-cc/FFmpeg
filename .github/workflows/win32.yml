@@ -11,13 +11,15 @@ jobs:
         working-directory: ./scripts/win32
     steps:
     - uses: actions/checkout@v3
-      # with:
-      #   submodules: true
+      with:
+        submodules: true
     - uses: msys2/setup-msys2@v2
       with:
         msystem: MINGW64
         update: true
-        install: nasm make
+        install: nasm pkg-config make
+    - name: install
+      run: ./install
     - name: Build x64-windows-static
       run: ./build x64-windows-static
       shell: cmd

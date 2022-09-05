@@ -1,6 +1,7 @@
 #!/bin/sh
 
 export PATH="/usr/bin:$PATH"
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
@@ -17,19 +18,16 @@ fi
 ROOT=$SCRIPTPATH/../..
 VENDOR=$ROOT/vendor
 
-ECFLAGS=-I"$VENDOR/git.videolan.org/git/ffmpeg/nv-codec-headers/include"
-
 cd $ROOT
 
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree --disable-doc \
+    --enable-ffnvcodec \
     --arch=x86_64 \
     --target-os=win64 --toolchain=msvc \
     --cc=$CC \
     --cxx=$CXX \
-    --extra-cflags=$ECFLAGS \
-    --extra-cxxflags=$ECFLAGS \
     --enable-pic \
     --enable-hardcoded-tables
 "
