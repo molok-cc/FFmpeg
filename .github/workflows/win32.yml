@@ -15,7 +15,6 @@ jobs:
         submodules: true
     - uses: msys2/setup-msys2@v2
       with:
-        msystem: MINGW64
         update: true
         install: nasm pkg-config make
     - name: install

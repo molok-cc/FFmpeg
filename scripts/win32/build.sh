@@ -23,8 +23,7 @@ cd $ROOT
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree \
-    --arch=x86_64 \
-    --target-os=win64 --toolchain=msvc \
+    --toolchain=msvc \
     --cc=$CC \
     --enable-pic \
     --enable-hardcoded-tables
