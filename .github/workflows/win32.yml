@@ -19,7 +19,7 @@ jobs:
         update: true
         install: nasm pkg-config make
     - name: install
-      run: ./install
+      run: ./install.sh
     - name: Build x64-windows-static
       run: ./build x64-windows-static
       shell: cmd
