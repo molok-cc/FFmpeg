@@ -11,16 +11,16 @@ jobs:
         working-directory: ./scripts/win32
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: true
     - uses: msys2/setup-msys2@v2
       with:
         msystem: MINGW64
         update: true
         install: nasm make
-    - name: build
-      run: ./build
+    - name: Build x64-windows-static
+      run: ./build x64-windows-static
       shell: cmd
-      env:
-        MSYS2_PATH_TYPE: inherit
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: build
