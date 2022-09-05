@@ -7,3 +7,6 @@ VENDOR=$ROOT/vendor
 
 cd $VENDOR/github.com/FFmpeg/nv-codec-headers
 make install
+
+cd $VENDOR/github.com/GPUOpen-LibrariesAndSDKs/AMF
+cp -r amf/public/include /usr/include/AMF

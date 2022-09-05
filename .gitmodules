@@ -16,3 +16,6 @@
 [submodule "vendor/github.com/FFmpeg/nv-codec-headers"]
 	path = vendor/github.com/FFmpeg/nv-codec-headers
 	url = https://github.com/FFmpeg/nv-codec-headers.git
+[submodule "vendor/github.com/GPUOpen-LibrariesAndSDKs/AMF"]
+	path = vendor/github.com/GPUOpen-LibrariesAndSDKs/AMF
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/AMF.git
