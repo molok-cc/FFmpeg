@@ -19,6 +19,8 @@ jobs:
     - name: build
       run: ./build
       shell: cmd
+      env:
+        MSYS2_PATH_TYPE: inherit
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: build
