@@ -45,3 +45,4 @@
 .vscode
 compile_commands.json
 .clangd
+build

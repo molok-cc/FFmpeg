@@ -1,0 +1,25 @@
+name: Build for win32
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+        working-directory: ./scripts/win32
+    steps:
+    - uses: actions/checkout@v3
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: nasm make
+    - name: build
+      run: ./build
+      shell: cmd
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: ../../build
