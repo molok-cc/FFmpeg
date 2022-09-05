@@ -22,12 +22,10 @@ cd $ROOT
 
 configure="
   ./configure \
-    --enable-gpl --enable-version3 --enable-nonfree --disable-doc \
-    --enable-ffnvcodec \
+    --enable-gpl --enable-version3 --enable-nonfree \
     --arch=x86_64 \
     --target-os=win64 --toolchain=msvc \
     --cc=$CC \
-    --cxx=$CXX \
     --enable-pic \
     --enable-hardcoded-tables
 "
