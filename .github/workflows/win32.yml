@@ -17,10 +17,11 @@ jobs:
       with:
         update: true
         install: nasm pkg-config make
-    - name: install
-      run: ./install.sh
+    - name: Install
+      run: ./vcvarsall ./install.sh
+      shell: cmd
     - name: Build x64-windows-static
-      run: ./build x64-windows-static
+      run: ./vcvarsall ./build.sh x64-windows-static
       shell: cmd
     # - uses: actions/upload-artifact@v3
     #   with:
