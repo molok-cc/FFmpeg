@@ -53,6 +53,7 @@ make install
 
 cd $VENDOR/bitbucket.org/multicoreware/x265_git
 cd source
+git fetch --tags
 mkdir build
 cd build
 if [[ $TRIPLET == *-static ]]; then
