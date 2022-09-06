@@ -27,7 +27,7 @@ jobs:
     - name: Build x64-windows-static
       run: ./vcvarsall ./build.sh x64-windows-static
       shell: cmd
-    # - uses: actions/upload-artifact@v3
-    #   with:
-    #     name: build
-    #     path: ../../build
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: ../../build
