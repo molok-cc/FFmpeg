@@ -20,12 +20,15 @@ VENDOR=$ROOT/vendor
 
 cd $ROOT
 
+ELDFLAGS="-LIBPATH/usr/local/lib"
+
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree \
     --enable-libmfx \
     --toolchain=msvc \
     --cc=$CC \
+    --extra-ldflags=$ELDFLAGS \
     --enable-pic \
     --enable-hardcoded-tables
 "
