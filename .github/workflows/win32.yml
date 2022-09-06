@@ -21,8 +21,8 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
       with:
         msbuild-architecture: x64
-    - name: Install
-      run: ./vcvarsall ./install.sh
+    - name: Install x64-windows-static
+      run: ./vcvarsall ./install.sh x64-windows-static
       shell: cmd
     - name: Build x64-windows-static
       run: ./vcvarsall ./build.sh x64-windows-static

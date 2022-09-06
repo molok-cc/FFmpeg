@@ -17,10 +17,12 @@ fi
 
 ROOT=$SCRIPTPATH/../..
 VENDOR=$ROOT/vendor
+PREFIX=$ROOT/build/$TRIPLET
+LIBDIR=$PREFIX/lib
 
 cd $ROOT
 
-ELDFLAGS="-LIBPATH/usr/local/lib"
+ELDFLAGS="-LIBPATH:$LIBDIR"
 
 configure="
   ./configure \
@@ -40,10 +42,10 @@ else
 fi
 
 if [ -z "$DEBUG" ]; then
-  configure+=" --prefix=$SCRIPTPATH/../../build/$TRIPLET"
+  configure+=" --prefix=$PREFIX"
 else
   configure+="
-    --prefix=$SCRIPTPATH/../../build/$TRIPLET/debug
+    --prefix=$PREFIX/debug
     --enable-debug
     --disable-optimizations
     --disable-stripping

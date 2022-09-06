@@ -22,3 +22,12 @@
 [submodule "vendor/github.com/Intel-Media-SDK/MediaSDK"]
 	path = vendor/github.com/Intel-Media-SDK/MediaSDK
 	url = https://github.com/Intel-Media-SDK/MediaSDK.git
+[submodule "vendor/code.videolan.org/videolan/x264"]
+	path = vendor/code.videolan.org/videolan/x264
+	url = https://code.videolan.org/videolan/x264.git
+[submodule "vendor/bitbucket.org/multicoreware/x265_git"]
+	path = vendor/bitbucket.org/multicoreware/x265_git
+	url = https://bitbucket.org/multicoreware/x265_git.git
+[submodule "vendor/github.com/mstorsjo/fdk-aac"]
+	path = vendor/github.com/mstorsjo/fdk-aac
+	url = https://github.com/mstorsjo/fdk-aac.git
