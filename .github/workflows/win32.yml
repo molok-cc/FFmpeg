@@ -17,6 +17,9 @@ jobs:
       with:
         update: true
         install: nasm pkg-config make
+          mingw-w64-x86_64-fdk-aac
+          mingw-w64-x86_64-x264
+          mingw-w64-x86_64-x265
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
       with:
