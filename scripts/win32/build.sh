@@ -1,7 +1,6 @@
 #!/bin/sh
 
 export PATH="/usr/bin:$PATH"
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
@@ -18,27 +17,34 @@ fi
 ROOT=$SCRIPTPATH/../..
 VENDOR=$ROOT/vendor
 PREFIX=$ROOT/build/$TRIPLET
+INCDIR=$PREFIX/include
 LIBDIR=$PREFIX/lib
 
-cd $ROOT
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$LIBDIR/pkgconfig:/usr/local/lib/pkgconfig
 
+ECFLAGS="-I$INCDIR"
 ELDFLAGS="-LIBPATH:$LIBDIR"
+
+cd $ROOT
 
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree \
+    --enable-libfdk-aac --enable-libx264 --enable-libx265 \
     --enable-libmfx \
     --toolchain=msvc \
     --cc=$CC \
-    --extra-ldflags=$ELDFLAGS \
     --enable-pic \
     --enable-hardcoded-tables
 "
 
 if [[ $TRIPLET == *-static ]]; then
   configure+=" --pkg-config-flags=--static"
+  # MSVC_RUNTIME_LIBRARY="MT"
+  # ELDFLAGS+=" -NODEFAULTLIB:MSVCRT"
 else
-  configure+=" --enable-shared"  
+  configure+=" --enable-shared"
+  # MSVC_RUNTIME_LIBRARY="MD"
 fi
 
 if [ -z "$DEBUG" ]; then
@@ -50,7 +56,11 @@ else
     --disable-optimizations
     --disable-stripping
   "
+  # MSVC_RUNTIME_LIBRARY+="d"
 fi
+
+# ECFLAGS+=" -$MSVC_RUNTIME_LIBRARY"
+configure+=" --extra-cflags=\"$ECFLAGS\" --extra-ldflags=\"$ELDFLAGS\""
 
 # echo $configure
 # exit 0
