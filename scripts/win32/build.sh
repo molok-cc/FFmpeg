@@ -38,10 +38,6 @@ configure="
     --enable-hardcoded-tables
 "
 
-if [ -z "$DEBUG" ]; then
-
-fi
-
 if [[ $TRIPLET == *-static ]]; then
   configure+=" --pkg-config-flags=--static"
   # MSVC_RUNTIME_LIBRARY="MT"
