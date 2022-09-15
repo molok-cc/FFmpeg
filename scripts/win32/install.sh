@@ -15,6 +15,8 @@ else
   CMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
 fi
 
+rm /usr/bin/link.exe
+
 cd $VENDOR/code.videolan.org/videolan/dav1d
 mkdir build && cd build
 configure="meson --prefix $PREFIX .."
@@ -22,7 +24,7 @@ if [[ $TRIPLET == *-static ]]; then
   configure+=" --default-library=static"
 fi
 eval $configure
-ninja
+meson compile
 meson install
 
 cd $VENDOR/github.com/FFmpeg/nv-codec-headers
