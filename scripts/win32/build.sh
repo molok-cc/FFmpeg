@@ -30,13 +30,17 @@ cd $ROOT
 configure="
   ./configure \
     --enable-gpl --enable-version3 --enable-nonfree \
-    --enable-libfdk-aac --enable-libx264 --enable-libx265 \
+    --enable-libdav1d --enable-libfdk-aac --enable-libx264 --enable-libx265 \
     --enable-libmfx \
     --toolchain=msvc \
     --cc=$CC \
     --enable-pic \
     --enable-hardcoded-tables
 "
+
+if [ -z "$DEBUG" ]; then
+
+fi
 
 if [[ $TRIPLET == *-static ]]; then
   configure+=" --pkg-config-flags=--static"

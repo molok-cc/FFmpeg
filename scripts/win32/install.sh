@@ -72,3 +72,13 @@ if [[ $TRIPLET == *-static ]]; then
 else
   mv $LIBDIR/x265-shared.lib $LIBDIR/libx265.lib
 fi
+
+cd $VENDOR/code.videolan.org/videolan/dav1d
+mkdir build && cd build
+configure="meson --prefix $PREFIX .."
+if [[ $TRIPLET == *-static ]]; then
+  configure+=" --default-library=static"
+fi
+eval $configure
+ninja
+meson install
