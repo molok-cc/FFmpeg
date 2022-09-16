@@ -31,3 +31,6 @@
 [submodule "vendor/github.com/mstorsjo/fdk-aac"]
 	path = vendor/github.com/mstorsjo/fdk-aac
 	url = https://github.com/mstorsjo/fdk-aac.git
+[submodule "vendor/code.videolan.org/videolan/dav1d"]
+	path = vendor/code.videolan.org/videolan/dav1d
+	url = https://code.videolan.org/videolan/dav1d.git
