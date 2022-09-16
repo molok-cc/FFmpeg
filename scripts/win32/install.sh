@@ -19,13 +19,15 @@ rm /usr/bin/link.exe
 
 cd $VENDOR/code.videolan.org/videolan/dav1d
 mkdir build && cd build
-configure="meson --prefix $PREFIX .."
+configure="meson .. --prefix=$PREFIX -Denable_tests=false -Denable_tools=false"
 if [[ $TRIPLET == *-static ]]; then
-  configure+=" --default-library=static"
+  configure+=" --default-library=static -Db_vscrt=static_from_buildtype"
 fi
+configure+=" -Dbuildtype=release"
 eval $configure
 meson compile
 meson install
+mv $PREFIX/lib/libdav1d.a $PREFIX/lib/dav1d.lib
 
 cd $VENDOR/github.com/FFmpeg/nv-codec-headers
 make install
