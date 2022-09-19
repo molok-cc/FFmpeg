@@ -3,6 +3,7 @@ sudo: false
 os:
   - linux
   - osx
+osx_image: xcode13.4
 addons:
   apt:
     packages:
@@ -28,3 +29,5 @@ script:
   - make -j 8
   - make fate-rsync
   - make check -j 8
+git:
+  submodules: false
