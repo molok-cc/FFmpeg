@@ -46,14 +46,14 @@ make install
 mv /usr/local/include/ffnvcodec $PREFIX/include/
 
 cd $VENDOR/github.com/GPUOpen-LibrariesAndSDKs/AMF
-mv amf/public/include $PREFIX/include/AMF
+cp amf/public/include $PREFIX/include/AMF
 
 cd $VENDOR/github.com/Intel-Media-SDK/MediaSDK
 cd api/mfx_dispatch/windows
 sed -i 's/10.0.17134.0/10.0.22621.0/' libmfx_vs2015.vcxproj
 MSBuild.exe libmfx_vs2015.vcxproj -p:PlatformToolset=v143 -p:Configuration=$CONFIG
 cd ../../..
-mv api/include /usr/local/include/mfx
+cp api/include /usr/local/include/mfx
 mkdir -p $LIBDIR
 mv ../build/win_x64/$CONFIG/lib/libmfx_vs2015.lib $LIBDIR/libmfx.lib
 
@@ -84,6 +84,7 @@ make install
 cd $VENDOR/bitbucket.org/multicoreware/x265_git
 cd source
 git fetch --tags
+sed -i 's/C_FLAGS_RELEASE/& CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG/' CMakeLists.txt
 mkdir build
 cd build
 if [[ $TRIPLET == *-static ]]; then
