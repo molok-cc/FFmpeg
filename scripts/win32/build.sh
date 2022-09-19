@@ -12,7 +12,7 @@ fi
 # CC=clang-cl
 # CXX=clang++-cl
 
-ROOT=$SCRIPTPATH/../..
+ROOT=`realpath $SCRIPTPATH/../..`
 VENDOR=$ROOT/vendor
 PREFIX=$ROOT/build/$TRIPLET
 
@@ -55,7 +55,6 @@ if [ ! -z "$DEBUG" ]; then
   configure+="
     --enable-debug
     --disable-optimizations
-    --disable-stripping
   "
   # MSVC_RUNTIME_LIBRARY+="d"
 fi
