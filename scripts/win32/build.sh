@@ -5,8 +5,6 @@ export PATH="/usr/bin:$PATH"
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
 
-DEBUG=$1
-
 if [ -z "$TRIPLET" ]; then
   TRIPLET=x64-windows
 fi
