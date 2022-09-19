@@ -73,3 +73,11 @@ eval $configure
 make clean
 make -j
 make install
+
+mv $LIBDIR/libavdevice.a $LIBDIR/avdevice.lib
+mv $LIBDIR/libavfilter.a $LIBDIR/avfilter.lib
+mv $LIBDIR/libavformat.a $LIBDIR/avformat.lib
+mv $LIBDIR/libavcodec.a $LIBDIR/avcodec.lib
+mv $LIBDIR/libpostproc.a $LIBDIR/postproc.lib
+mv $LIBDIR/libswresample.a $LIBDIR/swresample.lib
+mv $LIBDIR/libswscale.a $LIBDIR/swscale.lib
