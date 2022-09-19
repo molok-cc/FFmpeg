@@ -55,7 +55,7 @@ MSBuild.exe libmfx_vs2015.vcxproj -p:PlatformToolset=v143 -p:Configuration=$CONF
 cd ../../..
 mv api/include /usr/local/include/mfx
 mkdir -p $LIBDIR
-mv ../build/win_x64/Release/lib/libmfx_vs2015.lib $LIBDIR/libmfx.lib
+mv ../build/win_x64/$CONFIG/lib/libmfx_vs2015.lib $LIBDIR/libmfx.lib
 
 cd $VENDOR/github.com/mstorsjo/fdk-aac
 mkdir build
@@ -64,7 +64,7 @@ cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBS \
   -DCMAKE_MSVC_RUNTIME_LIBRARY=$CMAKE_MSVC_RUNTIME_LIBRARY \
   -DCMAKE_INSTALL_PREFIX=$PREFIX
 cmake --build . --config $CONFIG
-cmake --install .
+cmake --install . --config $CONFIG
 
 cd $VENDOR/code.videolan.org/videolan/x264
 configure="CC=cl ./configure --prefix=$PREFIX --disable-cli --enable-pic"
@@ -96,7 +96,7 @@ cmake .. -DCMAKE_BUILD_TYPE=$CONFIG -DSTATIC_LINK_CRT=$STATIC_LINK_CRT \
   -DCMAKE_MSVC_RUNTIME_LIBRARY=$CMAKE_MSVC_RUNTIME_LIBRARY \
   -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_CLI=OFF
 cmake --build . --config $CONFIG
-cmake --install .
+cmake --install . --config $CONFIG
 if [[ $TRIPLET == *-static ]]; then
   mv $LIBDIR/x265-static.lib $LIBDIR/libx265.lib
 else
