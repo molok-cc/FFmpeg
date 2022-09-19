@@ -81,3 +81,4 @@ mv $LIBDIR/libavcodec.a $LIBDIR/avcodec.lib
 mv $LIBDIR/libpostproc.a $LIBDIR/postproc.lib
 mv $LIBDIR/libswresample.a $LIBDIR/swresample.lib
 mv $LIBDIR/libswscale.a $LIBDIR/swscale.lib
+mv $LIBDIR/libavutil.a $LIBDIR/avutil.lib
