@@ -1,4 +1,5 @@
 set TRIPLET=%2
+set DEBUG=%3
 
 set MSYS2_PATH_TYPE=inherit
 
