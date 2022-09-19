@@ -37,10 +37,17 @@ configure="
     --enable-libdav1d --enable-libfdk-aac --enable-libx264 --enable-libx265 \
     --enable-libmfx \
     --toolchain=msvc \
-    --cc=$CC \
     --enable-pic \
     --enable-hardcoded-tables
 "
+
+if [ ! -z "$CC" ]; then
+  configure+=" --cc=$CC"
+fi
+
+if [ ! -z "$CXX" ]; then
+  configure+=" --cxx=$CXX"
+fi
 
 if [[ $TRIPLET == *-static ]]; then
   configure+=" --pkg-config-flags=--static"
