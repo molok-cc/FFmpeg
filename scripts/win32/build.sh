@@ -15,6 +15,11 @@ fi
 ROOT=$SCRIPTPATH/../..
 VENDOR=$ROOT/vendor
 PREFIX=$ROOT/build/$TRIPLET
+
+if [[ ! -z "$DEBUG" ]]; then
+  PREFIX+=/debug
+fi
+
 INCDIR=$PREFIX/include
 LIBDIR=$PREFIX/lib
 
@@ -27,6 +32,7 @@ cd $ROOT
 
 configure="
   ./configure \
+    --prefix=$PREFIX \
     --enable-gpl --enable-version3 --enable-nonfree \
     --enable-libdav1d --enable-libfdk-aac --enable-libx264 --enable-libx265 \
     --enable-libmfx \
@@ -45,11 +51,8 @@ else
   # MSVC_RUNTIME_LIBRARY="MD"
 fi
 
-if [ -z "$DEBUG" ]; then
-  configure+=" --prefix=$PREFIX"
-else
+if [ ! -z "$DEBUG" ]; then
   configure+="
-    --prefix=$PREFIX/debug
     --enable-debug
     --disable-optimizations
     --disable-stripping
