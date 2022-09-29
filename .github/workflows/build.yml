@@ -1,0 +1,74 @@
+name: Build
+
+on: push
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+        working-directory: ./scripts/windows
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: nasm pkg-config make diffutils mingw-w64-x86_64-meson
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: Install x64-windows-static
+      run: ./vcvarsall ./install.sh x64-windows-static
+      shell: cmd
+    - name: Build x64-windows-static
+      run: ./vcvarsall ./build.sh x64-windows-static
+      shell: cmd
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+  build_windows_debug:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+        working-directory: ./scripts/windows
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: nasm pkg-config make mingw-w64-x86_64-meson
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: Install x64-windows-static
+      run: ./vcvarsall ./install.sh x64-windows-static debug
+      shell: cmd
+    - name: Build x64-windows-static
+      run: ./vcvarsall ./build.sh x64-windows-static debug
+      shell: cmd
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+  build_osx:
+    runs-on: macos-12
+    defaults:
+      run:
+        working-directory: ./scripts/osx
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: ./build.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
