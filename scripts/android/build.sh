@@ -13,6 +13,7 @@ ARCH=aarch64
 TARGET=$ARCH-linux-android33
 
 CC=$ANDROID_NDK/toolchains/llvm/prebuilt/$HOST_TAG/bin/$TARGET-clang
+STRIP=$ANDROID_NDK/toolchains/llvm/prebuilt/$HOST_TAG/bin/llvm-strip
 
 cd $ROOT
 ./configure --prefix=$PREFIX \
@@ -22,7 +23,7 @@ cd $ROOT
   --enable-cross-compile \
   --arch=$ARCH \
   --target-os=android \
-  --cc=$CC \
+  --strip=$STRIP --cc=$CC \
   --extra-cflags="-I$PREFIX/include -fvisibility=hidden" \
   --extra-ldflags="-L$PREFIX/lib" \
   --enable-pic
