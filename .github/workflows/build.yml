@@ -66,6 +66,8 @@ jobs:
         working-directory: ./scripts/osx
     steps:
     - uses: actions/checkout@v3
+    - name: Install
+      run: ./install.sh
     - name: Build
       run: ./build.sh
     - uses: actions/upload-artifact@v3
