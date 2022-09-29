@@ -17,7 +17,7 @@ CC=$ANDROID_NDK/toolchains/llvm/prebuilt/$HOST_TAG/bin/$TARGET-clang
 cd $ROOT
 ./configure --prefix=$PREFIX \
   --enable-gpl --enable-version3 --enable-nonfree \
-  --enable-jni --enable-mediacodec \
+  --enable-jni --enable-mediacodec --disable-vulkan \
   --enable-small --disable-runtime-cpudetect \
   --enable-cross-compile \
   --arch=$ARCH \
