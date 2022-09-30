@@ -15,6 +15,8 @@ SDK_NAME=iphoneos
 ARCH=arm64
 
 CC="xcrun -sdk $SDK_NAME clang"
+CFLAGS="-I$PREFIX/include -fvisibility=hidden"
+LDFLAGS="-L$PREFIX/lib"
 
 cd $ROOT
 ./configure --prefix=$PREFIX \
@@ -24,8 +26,8 @@ cd $ROOT
   --arch=$ARCH \
   --target-os=darwin \
   --cc="$CC" \
-  --extra-cflags="-I$PREFIX/include -fvisibility=hidden" \
-  --extra-ldflags="-L$PREFIX/lib" \
+  --extra-cflags="$CFLAGS" \
+  --extra-ldflags="$LDFLAGS" \
   --enable-pic
 
 cat ffbuild/config.log
