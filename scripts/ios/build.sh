@@ -13,8 +13,8 @@ SDK_NAME=iphoneos
 ARCH=arm64
 
 CC="xcrun -sdk $SDK_NAME clang"
-CFLAGS="-I$PREFIX/include -fvisibility=hidden"
-LDFLAGS="-L$LIBDIR"
+CFLAGS="-arch $ARCH -I$PREFIX/include -fvisibility=hidden"
+LDFLAGS="-arch $ARCH -L$LIBDIR"
 
 mkdir -p $LIBDIR
 

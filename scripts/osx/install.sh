@@ -1,3 +1,3 @@
 #!/bin/sh
 
-brew install nasm
+brew install nasm coreutils

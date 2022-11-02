@@ -1,9 +1,5 @@
 #!/bin/sh
 
-realpath() {
-  [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-}
-
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
 if [ -z "$TRIPLET" ]; then
@@ -12,9 +8,12 @@ fi
 ROOT=`realpath $SCRIPTPATH/../..`
 PREFIX=$ROOT/build/$TRIPLET
 
+CFLAGS="-fvisibility=hidden"
+
 cd $ROOT
 ./configure --prefix=$PREFIX \
   --enable-gpl --enable-version3 --enable-nonfree \
+  --extra-cflags="$CFLAGS" \
   --enable-pic \
   --enable-hardcoded-tables
 
