@@ -31,7 +31,5 @@ cd $ROOT
   --extra-ldflags="$LDFLAGS" \
   --enable-pic
 
-cat ffbuild/config.log
-
-# make -j
-# make install
+make -j
+make install
