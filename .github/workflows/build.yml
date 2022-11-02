@@ -1,14 +1,14 @@
-name: Build for win32
+name: Build
 
 on: push
 
 jobs:
-  build:
+  build_windows:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
-        working-directory: ./scripts/win32
+        working-directory: ./scripts/windows
     steps:
     - uses: actions/checkout@v3
       with:
@@ -31,12 +31,12 @@ jobs:
       with:
         name: build
         path: build
-  build_debug:
+  build_windows_debug:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
-        working-directory: ./scripts/win32
+        working-directory: ./scripts/windows
     steps:
     - uses: actions/checkout@v3
       with:
@@ -55,6 +55,49 @@ jobs:
     - name: Build x64-windows-static
       run: ./vcvarsall ./build.sh x64-windows-static debug
       shell: cmd
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+  build_osx:
+    runs-on: macos-12
+    defaults:
+      run:
+        working-directory: ./scripts/osx
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install
+      run: ./install.sh
+    - name: Build
+      run: ./build.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+  build_android:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./scripts/android
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: ./build.sh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+  build_ios:
+    runs-on: macos-12
+    defaults:
+      run:
+        working-directory: ./scripts/ios
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install
+      run: ./install.sh
+    - name: Build
+      run: ./build.sh
     - uses: actions/upload-artifact@v3
       with:
         name: build

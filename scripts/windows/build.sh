@@ -31,8 +31,7 @@ ELDFLAGS="-LIBPATH:$LIBDIR"
 cd $ROOT
 
 configure="
-  ./configure \
-    --prefix=$PREFIX \
+  ./configure --prefix=$PREFIX \
     --enable-gpl --enable-version3 --enable-nonfree \
     --enable-libdav1d --enable-libfdk-aac --enable-libx264 --enable-libx265 \
     --enable-libmfx \
