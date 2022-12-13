@@ -54,6 +54,6 @@ cd $SCRIPTPATH/vendor/github.com/sekrit-twc/zimg
 make -j install
 check
 
-cd $SCRIPTPATH/vendor/git.videolan.org/git/ffmpeg/nv-codec-headers
+cd $SCRIPTPATH/vendor/github.com/FFmpeg/nv-codec-headers
 make install
 check
