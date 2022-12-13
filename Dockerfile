@@ -25,3 +25,4 @@ COPY --from=0 \
   /root/ffmpeg/ffprobe \
   /usr/local/bin/
 LABEL org.opencontainers.image.source=https://github.com/molok-cc/FFmpeg
+ENV NVIDIA_DRIVER_CAPABILITIES=all

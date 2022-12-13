@@ -43,5 +43,5 @@ LDFLAGS="$LDFLAGS -L$CUDA_LIBRARY_DIR"
   --extra-ldflags="$LDFLAGS" \
   --enable-hardcoded-tables
 
-# make -j
-# sudo make install
+make -j
+sudo make install
