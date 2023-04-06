@@ -2,7 +2,7 @@ FROM ghcr.io/molok-cc/ffmpeg:dev
 WORKDIR /root/ffmpeg
 RUN ./build.sh
 
-FROM nvidia/cuda:11.7.0-runtime-ubuntu22.04
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 ENV TZ=Etc/UTC
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
