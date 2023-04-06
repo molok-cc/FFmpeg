@@ -1,5 +1,6 @@
 FROM ghcr.io/molok-cc/ffmpeg:dev
 WORKDIR /root/ffmpeg
+COPY . .
 RUN ./build.sh
 
 FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
