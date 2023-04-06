@@ -970,7 +970,6 @@ static int parse_manifest_representation(AVFormatContext *s, const char *url,
                     }
                 }
             }
-            }
         }
 
         fragment_timeline_node = find_child_node_by_name(representation_segmenttemplate_node, "SegmentTimeline");
