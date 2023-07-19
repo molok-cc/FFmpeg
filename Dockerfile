@@ -7,7 +7,7 @@ FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 ENV TZ=Etc/UTC
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  libass9 libdav1d5 libfdk-aac2 libopus0 \
+  libass9 libdav1d5 libfdk-aac2 libopus0 librist4 \
   librtmp1 libsmbclient libsoxr0 libsrt1.4-openssl \
   libssh-4 libvpx7 libwebp7 libwebpmux3 \
   libx264-163 libx265-199 \

@@ -16,6 +16,7 @@ CXXFLAGS="$CXXFLAGS -I$CUDA_INCLUDE"
   --enable-libfreetype \
   --enable-libfribidi \
   --enable-libopus \
+  --enable-librist \
   --enable-librtmp \
   --enable-libshaderc \
   --enable-libsmbclient \
