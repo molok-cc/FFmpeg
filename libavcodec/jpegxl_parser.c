@@ -155,12 +155,12 @@ typedef struct JXLParseContext {
 
     /* using ISOBMFF-based container */
     int container;
-    int skip;
+    int64_t skip;
     int copied;
-    int collected_size;
-    int codestream_length;
+    int64_t collected_size;
+    int64_t codestream_length;
     int skipped_icc;
-    int next;
+    int64_t next;
 
     uint8_t cs_buffer[4096 + AV_INPUT_BUFFER_PADDING_SIZE];
 } JXLParseContext;
@@ -1315,6 +1315,13 @@ static int parse_frame_header(void *avctx, JXLParseContext *ctx, GetBitContext *
     if (get_bits1(gb)) {
         JXLEntropyDecoder dec;
         int64_t end, lehmer = 0;
+        /* parser sanity check to prevent TOC perm from spinning cpu */
+        if (width > meta->coded_width * 8 || height > meta->coded_height * 8) {
+            av_log(avctx, AV_LOG_WARNING, "frame of size %" PRIu32 "x%" PRIu32
+                " exceeds max size of %" PRIu32 "x%" PRIu32 ", aborting parser\n",
+                width, height, meta->coded_width * 8, meta->coded_height * 8);
+            return AVERROR_INVALIDDATA;
+        }
         ret = entropy_decoder_init(avctx, gb, &dec, 8);
         if (ret < 0)
             return ret;
@@ -1331,7 +1338,7 @@ static int parse_frame_header(void *avctx, JXLParseContext *ctx, GetBitContext *
             lehmer = entropy_decoder_read_symbol(gb, &dec, toc_context(lehmer));
             if (lehmer < 0 || get_bits_left(gb) < 0) {
                 entropy_decoder_close(&dec);
-                return AVERROR_BUFFER_TOO_SMALL;
+                return lehmer < 0 ? lehmer : AVERROR_BUFFER_TOO_SMALL;
             }
         }
         entropy_decoder_close(&dec);
@@ -1396,7 +1403,7 @@ static int skip_boxes(JXLParseContext *ctx, const uint8_t *buf, int buf_size)
     return 0;
 }
 
-static int try_parse(AVCodecParserContext *s, AVCodecContext *avctx, JXLParseContext *ctx,
+static int64_t try_parse(AVCodecParserContext *s, AVCodecContext *avctx, JXLParseContext *ctx,
                      const uint8_t *buf, int buf_size)
 {
     int ret, cs_buflen, header_skip;
@@ -1489,10 +1496,10 @@ static int jpegxl_parse(AVCodecParserContext *s, AVCodecContext *avctx,
     }
 
     if ((!ctx->container || !ctx->codestream_length) && !ctx->next) {
-        ret = try_parse(s, avctx, ctx, pbuf, pindex);
-        if (ret < 0)
+        int64_t ret64 = try_parse(s, avctx, ctx, pbuf, pindex);
+        if (ret64 < 0)
             goto flush;
-        ctx->next = ret;
+        ctx->next = ret64;
         if (ctx->container)
             ctx->skip += ctx->next;
     }
@@ -1534,7 +1541,7 @@ flush:
 }
 
 const AVCodecParser ff_jpegxl_parser = {
-    .codec_ids      = { AV_CODEC_ID_JPEGXL },
+    .codec_ids      = { AV_CODEC_ID_JPEGXL, AV_CODEC_ID_JPEGXL_ANIM },
     .priv_data_size = sizeof(JXLParseContext),
     .parser_parse   = jpegxl_parse,
     .parser_close   = ff_parse_close,
