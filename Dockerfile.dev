@@ -5,7 +5,7 @@ RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     clang nasm pkg-config cmake ninja-build meson autoconf libtool git curl \
   && apt-get install -y libass-dev libfdk-aac-dev libdav1d-dev libopus-dev \
-    librtmp-dev libsmbclient-dev libsoxr-dev libsrt-openssl-dev \
+    librist-dev librtmp-dev libsmbclient-dev libsoxr-dev libsrt-openssl-dev \
     libssh-dev libvpx-dev libwebp-dev libx264-dev libx265-dev \
     libxml2-dev \
   && ./build_vendor.sh \
